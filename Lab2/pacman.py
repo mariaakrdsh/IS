@@ -8,6 +8,8 @@ pygame.init()
 WIDTH = 900
 HEIGHT = 950
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
+
+# Налаштування таймера та кадрів на секунду
 timer = pygame.time.Clock()
 fps = 60
 font = pygame.font.Font('freesansbold.ttf', 20)
@@ -15,32 +17,29 @@ level = copy.deepcopy(boards)
 color = 'blue'
 PI = math.pi
 player_images = []
+
+# Ініціалізація та масштабування зображення Пакмена
 for i in range(1, 5):
     player_images.append(pygame.transform.scale(pygame.image.load(f'assets/player_images/{i}.png'), (45, 45)))
+
+# Ініціалізація та масштабування зображень привидів
 blinky_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/red.png'), (45, 45))
 pinky_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/pink.png'), (45, 45))
 inky_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/blue.png'), (45, 45))
 clyde_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/orange.png'), (45, 45))
 spooked_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/powerup.png'), (45, 45))
 dead_img = pygame.transform.scale(pygame.image.load(f'assets/ghost_images/dead.png'), (45, 45))
-player_x = 450
-player_y = 663
-direction = 0
-blinky_x = 56
-blinky_y = 58
-blinky_direction = 0
-inky_x = 440
-inky_y = 388
-inky_direction = 2
-pinky_x = 440
-pinky_y = 438
-pinky_direction = 2
-clyde_x = 440
-clyde_y = 438
-clyde_direction = 2
+
+# Початкові координати та напрямки для гравця та привидів
+player_x, player_y, direction = 450, 663, 0
+blinky_x, blinky_y, blinky_direction = 56, 58, 0
+inky_x, inky_y, inky_direction = 440, 388, 2
+pinky_x, pinky_y, pinky_direction = 440, 438, 2
+clyde_x, clyde_y, clyde_direction = 440, 438, 2
+
+
 counter = 0
 flicker = False
-# R, L, U, D
 turns_allowed = [False, False, False, False]
 direction_command = 0
 player_speed = 2
@@ -69,18 +68,19 @@ class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, box, id):
         self.x_pos = x_coord
         self.y_pos = y_coord
-        self.center_x = self.x_pos + 22
-        self.center_y = self.y_pos + 22
-        self.target = target
-        self.speed = speed
-        self.img = img
-        self.direction = direct
-        self.dead = dead
-        self.in_box = box
-        self.id = id
-        self.turns, self.in_box = self.check_collisions()
-        self.rect = self.draw()
+        self.center_x = self.x_pos + 22  # Центральна координата X
+        self.center_y = self.y_pos + 22  # Центральна координата Y
+        self.target = target  # Ціль, за якою привид рухається
+        self.speed = speed  # Швидкість руху привида
+        self.img = img  # Зображення привида
+        self.direction = direct  # Напрямок руху привида
+        self.dead = dead  # Чи мертвий привид
+        self.in_box = box  # Чи знаходиться привид у боксі
+        self.id = id  # Ідентифікатор привида
+        self.turns, self.in_box = self.check_collisions()  # Перевірка зіткнень
+        self.rect = self.draw()  # Малювання привида
 
+    # Метод для відображення привида на ігровому полі
     def draw(self):
         if (not powerup and not self.dead) or (eaten_ghost[self.id] and powerup and not self.dead):
             screen.blit(self.img, (self.x_pos, self.y_pos))
@@ -88,9 +88,11 @@ class Ghost:
             screen.blit(spooked_img, (self.x_pos, self.y_pos))
         else:
             screen.blit(dead_img, (self.x_pos, self.y_pos))
+        # Створення прямокутника навколо привида для визначення зіткнень
         ghost_rect = pygame.rect.Rect((self.center_x - 18, self.center_y - 18), (36, 36))
         return ghost_rect
 
+    # Метод для перевірки зіткнень та визначення можливих напрямків руху
     def check_collisions(self):
         # R, L, U, D
         num1 = ((HEIGHT - 50) // 32)
@@ -165,6 +167,7 @@ class Ghost:
             self.in_box = False
         return self.turns, self.in_box
 
+    # Логіка руху привида Clyde
     def move_clyde(self):
         # r, l, u, d
         # clyde is going to turn whenever advantageous for pursuit
@@ -304,6 +307,7 @@ class Ghost:
             self.x_pos - 30
         return self.x_pos, self.y_pos, self.direction
 
+    # Логіка руху привида Blinky
     def move_blinky(self):
         # r, l, u, d
         if self.direction == 0:
@@ -409,6 +413,7 @@ class Ghost:
             self.x_pos - 30
         return self.x_pos, self.y_pos, self.direction
 
+    # Логіка руху привида Inky
     def move_inky(self):
         # r, l, u, d
         if self.direction == 0:
@@ -530,6 +535,7 @@ class Ghost:
             self.x_pos - 30
         return self.x_pos, self.y_pos, self.direction
 
+    # Логіка руху привида Pinky
     def move_pinky(self):
         # r, l, u, d
         if self.direction == 0:
