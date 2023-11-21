@@ -1,0 +1,10 @@
+car,purpose,fuel_efficiency,size,brand_preference,budget_range,tech_features,color_preference,driving_conditions
+sedan,daily_commute,moderate,compact,no,affordable,basic,any,normal
+sports_car,joyful_driving,low,small,no,affordable,basic,bright,normal
+SUV,family_transport,moderate,midsize,no,affordable,basic,any,normal
+pickup_truck,hauling,low,full_size,no,affordable,basic,any,fair
+luxury_car,joyful_driving,moderate,full_size,yes,premium,advanced,elegant,normal
+hatchback,daily_commute,high,compact,no,affordable,basic,any,normal
+convertible,joyful_driving,low,small,no,affordable,basic,bright,normal
+crossover,family_transport,moderate,midsize,no,affordable,basic,any,normal
+minivan,family_transport,moderate,full_size,no,affordable,basic,any,challenging
